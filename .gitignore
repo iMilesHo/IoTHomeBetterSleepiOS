@@ -1,0 +1,64 @@
+# Xcode
+.DS_Store
+build/
+DerivedData/
+xcuserdata/
+*.moved-aside
+*.xcuserstate
+
+# Pods
+Pods/
+Podfile.lock
+Pods.xcodeproj/
+
+# Firebase config files
+GoogleService-Info.plist
+GoogleService-Info-dev.plist
+Info.plist
+
+
+# Carthage
+Carthage/Build/
+
+# Sensitive data
+*.xcconfig
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+fastlane/ipas/
+fastlane/logs/
+fastlane/reporters/
+fastlane/metadata/
+fastlane/web/
+fastlane/.env
+
+# Xcode noise
+*.suo
+*.user
+*.userosscache
+*.sxcuser
+*.sxccheckout
+
+# CodePush
+codepush.json
+
+# CocoaPods
+Pods/Manifest.lock
+
+# Flutter
+.idea/
+.vscode/
+.packages
+.pub/
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-plugins-dev-dependencies
+.flutter-plugins-local
+.flutter-plugins-third-party
+ios/Flutter/.last_build_id
+.ios_workspace/
