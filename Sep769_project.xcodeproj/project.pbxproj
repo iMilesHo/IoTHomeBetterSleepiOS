@@ -44,6 +44,7 @@
 		9281C8822AD8F4C100CD7991 /* DeviceControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9281C8812AD8F4C100CD7991 /* DeviceControlViewController.swift */; };
 		929EFEA32ADED3CE0048D7B6 /* HumiTempSoundModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929EFEA22ADED3CE0048D7B6 /* HumiTempSoundModel.swift */; };
 		929EFEA52ADED41A0048D7B6 /* LocalCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929EFEA42ADED41A0048D7B6 /* LocalCollection.swift */; };
+		929EFEA72ADF84840048D7B6 /* SleepQualituyFeedbackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929EFEA62ADF84840048D7B6 /* SleepQualituyFeedbackModel.swift */; };
 		959194B88CF4F63957AC3B25 /* Pods_Sep769_project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB797BD549253276D7E240C9 /* Pods_Sep769_project.framework */; };
 /* End PBXBuildFile section */
 
@@ -88,6 +89,7 @@
 		9281C8812AD8F4C100CD7991 /* DeviceControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceControlViewController.swift; sourceTree = "<group>"; };
 		929EFEA22ADED3CE0048D7B6 /* HumiTempSoundModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumiTempSoundModel.swift; sourceTree = "<group>"; };
 		929EFEA42ADED41A0048D7B6 /* LocalCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalCollection.swift; sourceTree = "<group>"; };
+		929EFEA62ADF84840048D7B6 /* SleepQualituyFeedbackModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepQualituyFeedbackModel.swift; sourceTree = "<group>"; };
 		A253D84F6C3D083015DBFE6C /* Pods-Sep769_project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sep769_project.release.xcconfig"; path = "Target Support Files/Pods-Sep769_project/Pods-Sep769_project.release.xcconfig"; sourceTree = "<group>"; };
 		AB797BD549253276D7E240C9 /* Pods_Sep769_project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sep769_project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D60B57A4F8BCB2521D51B2FF /* Pods-Sep769_project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sep769_project.debug.xcconfig"; path = "Target Support Files/Pods-Sep769_project/Pods-Sep769_project.debug.xcconfig"; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				9281C8812AD8F4C100CD7991 /* DeviceControlViewController.swift */,
 				9201C6C12AD90877000C7A97 /* FeedbackViewController.swift */,
 				929EFEA22ADED3CE0048D7B6 /* HumiTempSoundModel.swift */,
+				929EFEA62ADF84840048D7B6 /* SleepQualituyFeedbackModel.swift */,
 			);
 			path = Sep769_project;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				9253A8132AD342E900B58808 /* AuthViewController.swift in Sources */,
 				9253A8142AD342E900B58808 /* LoginController.swift in Sources */,
 				9253A8152AD342E900B58808 /* UserViewController.swift in Sources */,
+				929EFEA72ADF84840048D7B6 /* SleepQualituyFeedbackModel.swift in Sources */,
 				9253A8172AD342E900B58808 /* OtherAuthViewController.swift in Sources */,
 				9253A7CC2AD1ED7700B58808 /* ViewController.swift in Sources */,
 				9253A8182AD342E900B58808 /* CustomAuthViewController.swift in Sources */,
@@ -547,6 +551,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sep769_project/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BetterSleep;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -562,9 +567,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.milesho.iOSAPPSEP769Project;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -580,6 +588,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sep769_project/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BetterSleep;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -595,9 +604,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.milesho.iOSAPPSEP769Project;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

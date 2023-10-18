@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import CocoaMQTT
+import FirebaseFirestore
+import FirebaseAuth
 
 class DeviceControlViewController: UIViewController {
     
@@ -21,6 +24,8 @@ class DeviceControlViewController: UIViewController {
         df.timeStyle = .short
         return df
     }()
+    
+    var mqtt: CocoaMQTT!
     
     private let deviceSwitchButton: UIButton = {
         let button = UIButton()
@@ -49,16 +54,106 @@ class DeviceControlViewController: UIViewController {
         }
     }
     
+    private var turnOnOffRecordModels: [TurnOnOffRecordModel] = []
+    private var documents: [DocumentSnapshot] = []
+
+    fileprivate var query: Query? {
+      didSet {
+        if let listener = listener {
+          listener.remove()
+          observeQuery()
+        }
+      }
+    }
+    
+    private var listener: ListenerRegistration?
+
+    fileprivate func observeQuery() {
+      guard let query = query else { return }
+      stopObserving()
+
+      // Display data from Firestore, part one
+        listener = query.addSnapshotListener { [unowned self] (snapshot, error) in
+          guard let snapshot = snapshot else {
+            print("Error fetching snapshot results: \(error!)")
+            return
+          }
+          let models = snapshot.documents.map { (document) -> TurnOnOffRecordModel in
+            if let model = TurnOnOffRecordModel(dictionary: document.data()) {
+              return model
+            } else {
+              // Don't use fatalError here in a real app.
+              fatalError("Unable to initialize type \(TurnOnOffRecordModel.self) with dictionary \(document.data())")
+            }
+          }
+          self.turnOnOffRecordModels = models
+          self.documents = snapshot.documents
+
+          
+          self.tableView.reloadData()
+        }
+
+    }
+
+    fileprivate func stopObserving() {
+      listener?.remove()
+    }
+
+    fileprivate func baseQuery() -> Query {
+        return Firestore.firestore().collection("humidifierTurnOnOffRecord").order(by: "created", descending: true).limit(to: 50)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "Control"
         self.view.backgroundColor = .white
         
+        query = baseQuery()
         
         setupTableView()
-        setupViewAllHistoryButton()
+        //setupViewAllHistoryButton()
         setupDeviceSwitchButton()
+        
+        initializeMQTT()
+        mqttConnect()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        observeQuery()
+        if mqtt.connState == .disconnected {
+            mqttConnect()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+      super.viewWillDisappear(animated)
+      stopObserving()
+    }
+    
+    func initializeMQTT() {
+        let clientID = "iOSDevice-" + String(ProcessInfo().processIdentifier)
+        mqtt = CocoaMQTT(clientID: clientID, host: "test.mosquitto.org", port: 1883)
+        mqtt.delegate = self
+        mqtt.keepAlive = 3600
+        mqtt.autoReconnect = true
+    }
+    
+    func mqttConnect() {
+        if !mqtt.connect() {
+            updateConnectButton(isConnected: false, reason: "Unable to initiate connection")
+        }
+    }
+    
+    func updateConnectButton(isConnected: Bool, reason: String? = nil) {
+        if isConnected {
+            deviceSwitchButton.setTitle("Turn On/Off", for: .normal)
+            deviceSwitchButton.isEnabled = true
+        } else {
+            deviceSwitchButton.setTitle("Connection Failed: \(reason ?? "Unknown Error")", for: .disabled)
+            deviceSwitchButton.isEnabled = false
+        }
     }
     
     func setupTableView() {
@@ -123,30 +218,93 @@ class DeviceControlViewController: UIViewController {
     @objc func toggleDevice() {
         isDeviceOn.toggle()
         // 这里可以加入其他逻辑，例如发送网络请求，来真正控制设备。
+        mqtt.publish("Team1/Power", withString: "\(humidifierState)", qos: .qos2)
         
         humidifierState.toggle()
         
         history.insert(dateFormatter.string(from: Date()) + (humidifierState ? ": ON" : ": OFF"), at: 0)
         recentHistory.insert(dateFormatter.string(from: Date()) + (humidifierState ? ": ON" : ": OFF"), at: 0)
         
-        // Show only the last 12 actions
-        if recentHistory.count > 12 {
-            recentHistory.removeLast()
-        }
+        let userID = Auth.auth().currentUser?.uid ?? "anonymous"
+        let created = Date().timeIntervalSince1970
+        let state = humidifierState
+        
+        let collection = Firestore.firestore().collection("humidifierTurnOnOffRecord")
+        let sleepQuailityModel = TurnOnOffRecordModel(
+          userID: userID,
+          created: Int64(created),
+          turnOrOff: humidifierState
+        )
+
+        collection.addDocument(data: sleepQuailityModel.dictionary)
+        
         tableView.reloadData()
     }
     
+    deinit {
+      listener?.remove()
+    }
 }
 
 extension DeviceControlViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recentHistory.count
+        return self.turnOnOffRecordModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath)
-        cell.textLabel?.text = recentHistory[indexPath.row]
+        
+        cell.textLabel?.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(turnOnOffRecordModels[indexPath.row].created))) + " turn  \(turnOnOffRecordModels[indexPath.row].turnOrOff)"
         return cell
+    }
+}
+
+extension DeviceControlViewController: CocoaMQTTDelegate {
+    func mqttDidPing(_ mqtt: CocoaMQTT) {
+        print("mqttDidPing")
+    }
+    
+    func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
+        print("mqttDidReceivePong")
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
+        print("didPublishAck, id: ", id)
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
+        print("didReceiveMessage, topic: ",message.topic, ", payload: ", message.payload)
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
+        print("didPublishMessage, topic: ",message.topic, ", payload: ", message.payload)
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {
+        print("didSubscribeTopics, topics: ", "success:",success, "failed", failed)
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {
+        print("didUnsubscribeTopics, topics:", topics)
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didReceive trust: SecTrust, completionHandler: @escaping (Bool) -> Void) {
+            completionHandler(true)
+        print("didReceive, trust:", trust)
+    }
+
+    func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+        if ack == .accept {
+            updateConnectButton(isConnected: true)
+            mqtt.publish("Team1/Power", withString: "false", qos: .qos2)
+            mqtt.subscribe("Team1/PlugStatus", qos: .qos2)
+        } else {
+            updateConnectButton(isConnected: false, reason: "Connection refused: \(ack)")
+        }
+    }
+
+    func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
+        updateConnectButton(isConnected: false, reason: err?.localizedDescription)
     }
     
     
@@ -211,5 +369,4 @@ extension HistoryViewController: UITableViewDataSource {
         return cell
     }
 }
-
 

@@ -23,6 +23,9 @@ target 'Sep769_project' do
   
   ## Pod for dashboard
   pod 'Charts'
+  
+  ## Pod for MQTT
+  pod 'CocoaMQTT'
 
 #  target 'Sep769_projectTests' do
 #    inherit! :search_paths

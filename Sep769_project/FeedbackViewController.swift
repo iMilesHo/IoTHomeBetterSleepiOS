@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import FirebaseFirestore
+import FirebaseAuth
 
 protocol DataTransferDelegate: AnyObject {
-    func transfer(data: String)
+    func transfer(data: String, sleepQuality: Int)
 }
 
 
@@ -39,16 +41,79 @@ class FeedbackViewController: UIViewController {
         return button
     }()
     
+    private var sleepfeedbackmodels: [SleepQualituyFeedbackModel] = []
+    private var documents: [DocumentSnapshot] = []
+
+    fileprivate var query: Query? {
+      didSet {
+        if let listener = listener {
+          listener.remove()
+          observeQuery()
+        }
+      }
+    }
+
+    private var listener: ListenerRegistration?
+
+    fileprivate func observeQuery() {
+      guard let query = query else { return }
+      stopObserving()
+
+      // Display data from Firestore, part one
+        listener = query.addSnapshotListener { [unowned self] (snapshot, error) in
+          guard let snapshot = snapshot else {
+            print("Error fetching snapshot results: \(error!)")
+            return
+          }
+          let models = snapshot.documents.map { (document) -> SleepQualituyFeedbackModel in
+            if let model = SleepQualituyFeedbackModel(dictionary: document.data()) {
+              return model
+            } else {
+              // Don't use fatalError here in a real app.
+              fatalError("Unable to initialize type \(SleepQualituyFeedbackModel.self) with dictionary \(document.data())")
+            }
+          }
+          self.sleepfeedbackmodels = models
+          self.documents = snapshot.documents
+
+          
+          self.tableView.reloadData()
+        }
+
+    }
+
+    fileprivate func stopObserving() {
+      listener?.remove()
+    }
+
+    fileprivate func baseQuery() -> Query {
+        return Firestore.firestore().collection("sleepQualityFeedback").order(by: "created", descending: true).limit(to: 50)
+    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "Feedback"
         self.view.backgroundColor = .white
         
-        
+        tableView.dataSource = self
+        tableView.delegate = self
         setupTableView()
-        setupViewAllHistoryButton()
+        //setupViewAllHistoryButton()
         setupDeviceSwitchButton()
+        query = baseQuery()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+      super.viewWillAppear(animated)
+      self.setNeedsStatusBarAppearanceUpdate()
+      observeQuery()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+      super.viewWillDisappear(animated)
+      stopObserving()
     }
     
     func setupTableView() {
@@ -116,31 +181,44 @@ class FeedbackViewController: UIViewController {
         self.present(navigationController, animated: true, completion: nil)
     }
     
+    deinit {
+      listener?.remove()
+    }
+    
 }
 
 extension FeedbackViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recentHistory.count
+        return self.sleepfeedbackmodels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath)
-        cell.textLabel?.text = recentHistory[indexPath.row]
+        cell.textLabel?.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(sleepfeedbackmodels[indexPath.row].created))) + " sleep quality(1-10): \(sleepfeedbackmodels[indexPath.row].sleepQuaility)"
         return cell
     }
     
 }
 
 extension FeedbackViewController: DataTransferDelegate {
-    func transfer(data: String){
+    func transfer(data: String, sleepQuality: Int){
         
         history.insert(data, at: 0)
         recentHistory.insert(data, at: 0)
-        
-        // Show only the last 12 actions
-        if recentHistory.count > 12 {
-            recentHistory.removeLast()
-        }
+
+        let userID = Auth.auth().currentUser?.uid ?? "anonymous"
+        let created = Date().timeIntervalSince1970
+        let sleepQuaility = sleepQuality
+
+        // Write Data to Firestore
+          let collection = Firestore.firestore().collection("sleepQualityFeedback")
+          let sleepQuailityModel = SleepQualituyFeedbackModel(
+            userID: userID,
+            created: Int64(created),
+            sleepQuaility: sleepQuaility
+          )
+
+          collection.addDocument(data: sleepQuailityModel.dictionary)
         tableView.reloadData()
     }
 }
@@ -223,7 +301,7 @@ class SleepQualityFeedbackViewController: UIViewController {
             if button == sender {
                 button.setBackgroundImage(UIImage(named: "circleIcon"), for: .normal)
                 let description = dateFormatter.string(from: Date()) + " sleep quality(1-10): \(sender.tag)"
-                delegate?.transfer(data: description)
+                delegate?.transfer(data: description, sleepQuality: sender.tag)
                 closeAction()
             } else {
                 button.setBackgroundImage(UIImage(named: "circleIconGray"), for: .normal)

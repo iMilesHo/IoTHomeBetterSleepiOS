@@ -32,7 +32,6 @@ class ChartXAxisFormatter: NSObject, AxisValueFormatter {
 }
 
 class DashboardViewController: UIViewController {
-    
     // 创建图表控件
     var temperatureChartView: LineChartView!
     var humidityChartView: LineChartView!
@@ -46,6 +45,8 @@ class DashboardViewController: UIViewController {
     
     // 房间选择器
     var roomSegmentedControl: UISegmentedControl!
+    
+    var currentDate: Int64 = 0
     
     private var humiTempSounds: [HumiTempSoundModel] = []
     private var documents: [DocumentSnapshot] = []
@@ -62,8 +63,11 @@ class DashboardViewController: UIViewController {
     private var listener: ListenerRegistration?
     
     fileprivate func observeQuery() {
-        guard let query = query else { return }
+        guard var query = query else { return }
         stopObserving()
+        // 开始加载指示
+        activityIndicator.startAnimating()
+        
         
         // Display data from Firestore, part one
         listener = query.addSnapshotListener { [unowned self] (snapshot, error) in
@@ -78,7 +82,14 @@ class DashboardViewController: UIViewController {
             self.documents = snapshot.documents
             
             loadData()
+            // 停止加载指示器
+            self.activityIndicator.stopAnimating()
         }
+        
+    }
+    
+    func filteredobserveQuery(){
+        let date = datePicker.date
         
     }
     
@@ -87,7 +98,11 @@ class DashboardViewController: UIViewController {
     }
     
     fileprivate func baseQuery() -> Query {
-        return Firestore.firestore().collection("humiTempSound").order(by: "created", descending: true) .limit(to: 24)
+        var baseQuery1 = Firestore.firestore().collection("humiTempSound").whereField("userID", isEqualTo: "darktalent")//darktalentDefault-01
+        baseQuery1 = baseQuery1.whereField("EdgeDeviceID", isEqualTo: "darktalentDefault-01")
+        baseQuery1 = baseQuery1.whereField("created", isLessThan: 1000000000000)
+        
+        return baseQuery1.order(by: "created", descending: true).limit(to: 24)
     }
     
     override func viewDidLoad() {
@@ -156,7 +171,30 @@ class DashboardViewController: UIViewController {
     }
     
     @objc func dateChanged() {
-        loadData()  // 当日期更改时重新加载数据
+        let selectedDate = datePicker.date
+        let calendar = Calendar.current
+
+        let components = calendar.dateComponents([.year, .month, .day], from: selectedDate)
+        guard let startDate = calendar.date(from: components) else {
+            fatalError("Couldn't create the start date.")
+        }
+
+        guard let endDate = calendar.date(byAdding: .day, value: 1, to: startDate) else {
+            fatalError("Couldn't create the end date.")
+        }
+
+        let startTimestamp = startDate.timeIntervalSince1970
+        let endTimestamp = endDate.timeIntervalSince1970
+        
+        var filtered = Firestore.firestore().collection("humiTempSound").whereField("userID", isEqualTo: "darktalent")//darktalentDefault-01
+        filtered = filtered.whereField("EdgeDeviceID", isEqualTo: "darktalentDefault-01")
+        filtered = filtered.whereField("created", isGreaterThanOrEqualTo: startTimestamp)
+        filtered = filtered.whereField("created", isLessThan: endTimestamp)
+        filtered = filtered.order(by: "created")
+        self.query = filtered.limit(to: 100)
+        //observeQuery()
+        
+        //loadData()
     }
     
     func setupCharts() {
@@ -166,6 +204,8 @@ class DashboardViewController: UIViewController {
         temperatureTitleLabel.textAlignment = .center
         
         temperatureChartView = LineChartView()
+        temperatureChartView.delegate = self
+
         // ... [其他初始化设置]
         
         // Humidity Chart
@@ -174,6 +214,7 @@ class DashboardViewController: UIViewController {
         humidityTitleLabel.textAlignment = .center
         
         humidityChartView = LineChartView()
+        humidityChartView.delegate = self
         // ... [其他初始化设置]
         
         // Noise Chart
@@ -182,6 +223,7 @@ class DashboardViewController: UIViewController {
         noiseTitleLabel.textAlignment = .center
         
         noiseChartView = LineChartView()
+        noiseChartView.delegate = self
         // ... [其他初始化设置]
         
         // ... 这里可以进行更多的图表自定义，例如颜色、轴标签等
@@ -234,8 +276,14 @@ class DashboardViewController: UIViewController {
     }
     
     func loadData() {
-        // 开始加载指示
-        activityIndicator.startAnimating()
+//        if self.humiTempSounds.count > 0 {
+//            currentDate = self.humiTempSounds[0].created
+//        }
+//        
+//        let dateFromTimestamp = Date(timeIntervalSince1970: TimeInterval(currentDate))
+//
+//        datePicker = UIDatePicker()
+//        datePicker.date = dateFromTimestamp
         
         let humidityEntries = self.humiTempSounds.map { ChartDataEntry(x: Double($0.created*1000), y: $0.humidity) }
         let TempEntries = self.humiTempSounds.map { ChartDataEntry(x: Double($0.created*1000), y: $0.temperature) }
@@ -245,9 +293,7 @@ class DashboardViewController: UIViewController {
         self.updateChartData(with: TempEntries, chartView: self.humidityChartView)
         self.updateChartData(with: SoundEntries, chartView: self.noiseChartView)
         
-        // 停止加载指示器
-        self.activityIndicator.stopAnimating()
-        
+       
         // 模拟网络请求
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
 //            let temperatureData = self.generateMockData(for: 24)
@@ -267,14 +313,14 @@ class DashboardViewController: UIViewController {
     // 示例函数: 更新图表数据
     func updateChartData(with entries: [ChartDataEntry], chartView: LineChartView) {
         let dataSet = LineChartDataSet(entries: entries)
-        dataSet.colors = [NSUIColor.systemGray] // 可以设置线的颜色
+        dataSet.colors = [NSUIColor.gray] // 可以设置线的颜色
         dataSet.valueColors = [NSUIColor.black] // 可以设置值的颜色
         
         // 优化图表显示风格
-        dataSet.lineWidth = 2.5
-        dataSet.circleRadius = 5
-        dataSet.circleHoleRadius = 2.5
-        dataSet.circleColors = [NSUIColor.green]
+        dataSet.mode = .linear
+        dataSet.lineWidth = 2
+        dataSet.drawCirclesEnabled = false
+        dataSet.drawValuesEnabled = false
         
         let data = LineChartData(dataSets: [dataSet])
         chartView.data = data
@@ -286,6 +332,16 @@ class DashboardViewController: UIViewController {
         formatter.timeStyle = .short
         let xAxisValueFormatter = ChartXAxisFormatter(referenceTimeInterval: 3600, dateFormatter: formatter)
         chartView.xAxis.valueFormatter = xAxisValueFormatter
+        
+        // Enable zoom and scroll
+        chartView.scaleYEnabled = false
+        chartView.dragEnabled = true
+        chartView.dragXEnabled = true
+        chartView.dragYEnabled = false
+        chartView.pinchZoomEnabled = true
+        
+        chartView.xAxis.labelRotationAngle = 45 // Rotate labels for better visibility
+        chartView.xAxis.setLabelCount(5, force: false) // Set the desired number of labels
     }
     
     // 修改生成数据函数，使其基于所选日期
@@ -306,6 +362,19 @@ class DashboardViewController: UIViewController {
     
     deinit {
         listener?.remove()
+    }
+}
+
+extension DashboardViewController: ChartViewDelegate {
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        let timestamp = entry.x
+        let date = Date(timeIntervalSince1970: timestamp)
+        
+        // Use the date object to extract the exact time
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        let timeString = formatter.string(from: date)
+        print(timeString)
     }
 }
 
