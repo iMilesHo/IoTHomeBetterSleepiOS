@@ -253,8 +253,8 @@ extension DeviceControlViewController:  UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath)
-        
-        cell.textLabel?.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(turnOnOffRecordModels[indexPath.row].created))) + " turn  \(turnOnOffRecordModels[indexPath.row].turnOrOff)"
+        let onOroff = turnOnOffRecordModels[indexPath.row].turnOrOff ? "on" : "off"
+        cell.textLabel?.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(turnOnOffRecordModels[indexPath.row].created))) + " Turn  \(onOroff)"
         return cell
     }
 }

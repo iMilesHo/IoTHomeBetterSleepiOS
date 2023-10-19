@@ -255,6 +255,18 @@ class SleepQualityFeedbackViewController: UIViewController {
         // 添加一个关闭按钮
         let closeButton = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(closeAction))
         navigationItem.rightBarButtonItem = closeButton
+        pullHealthData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+      super.viewWillAppear(animated)
+      self.setNeedsStatusBarAppearanceUpdate()
+      observeQuery()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+      super.viewWillDisappear(animated)
+      stopObserving()
     }
     
     func setupFeedbackButtons() {
@@ -311,6 +323,78 @@ class SleepQualityFeedbackViewController: UIViewController {
     
     @objc func closeAction() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    private func pullHealthData() {
+        _Concurrency.Task {
+            try await getHealthData()
+        }
+    }
+    
+    func getHealthData() async throws {
+        let healthDataFetcher = HealthDataFetcher()
+        let healthData = try await healthDataFetcher.fetchAndProcessHealthData()
+        
+//        for i in healthData {
+//            let collection = Firestore.firestore().collection("healthKitDataFirestoreS")
+//            collection.addDocument(data: i.dictionary)
+//        }
+        
+        var lastHealthData = healthData.last
+
+        // Write Data to Firestore
+        let collection = Firestore.firestore().collection("sleepQualityFeedback")
+        if let dictionary = lastHealthData?.dictionary {
+            collection.addDocument(data: dictionary)
+        }
+    }
+    
+    private var sleepfeedbackmodels: [SleepQualituyFeedbackModel] = []
+    private var documents: [DocumentSnapshot] = []
+
+    fileprivate var query: Query? {
+      didSet {
+        if let listener = listener {
+          listener.remove()
+          observeQuery()
+        }
+      }
+    }
+    
+    private var listener: ListenerRegistration?
+
+    fileprivate func observeQuery() {
+      guard let query = query else { return }
+      stopObserving()
+
+      // Display data from Firestore, part one
+        listener = query.addSnapshotListener { [unowned self] (snapshot, error) in
+          guard let snapshot = snapshot else {
+            print("Error fetching snapshot results: \(error!)")
+            return
+          }
+          let models = snapshot.documents.map { (document) -> SleepQualituyFeedbackModel in
+            if let model = SleepQualituyFeedbackModel(dictionary: document.data()) {
+              return model
+            } else {
+              // Don't use fatalError here in a real app.
+              fatalError("Unable to initialize type \(SleepQualituyFeedbackModel.self) with dictionary \(document.data())")
+            }
+          }
+          self.sleepfeedbackmodels = models
+          self.documents = snapshot.documents
+
+          
+        }
+
+    }
+
+    fileprivate func stopObserving() {
+      listener?.remove()
+    }
+
+    fileprivate func baseQuery() -> Query {
+        return Firestore.firestore().collection("healthKitDataFirestoreS").order(by: "date", descending: true).limit(to: 50)
     }
 }
 

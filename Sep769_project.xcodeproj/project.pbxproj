@@ -42,6 +42,10 @@
 		9281C87C2AD8D6C400CD7991 /* MainLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9281C87B2AD8D6C400CD7991 /* MainLoginViewController.swift */; };
 		9281C8802AD8EDFC00CD7991 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9281C87F2AD8EDFC00CD7991 /* DashboardViewController.swift */; };
 		9281C8822AD8F4C100CD7991 /* DeviceControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9281C8812AD8F4C100CD7991 /* DeviceControlViewController.swift */; };
+		9290776F2AE0C8280017AF20 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9290776B2AE0C8270017AF20 /* HealthData.swift */; };
+		929077702AE0C8280017AF20 /* HealthDataFetcherError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9290776C2AE0C8270017AF20 /* HealthDataFetcherError.swift */; };
+		929077712AE0C8280017AF20 /* HealthDataFetcher+Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9290776D2AE0C8270017AF20 /* HealthDataFetcher+Process.swift */; };
+		929077722AE0C8280017AF20 /* HealthDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9290776E2AE0C8270017AF20 /* HealthDataFetcher.swift */; };
 		929EFEA32ADED3CE0048D7B6 /* HumiTempSoundModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929EFEA22ADED3CE0048D7B6 /* HumiTempSoundModel.swift */; };
 		929EFEA52ADED41A0048D7B6 /* LocalCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929EFEA42ADED41A0048D7B6 /* LocalCollection.swift */; };
 		929EFEA72ADF84840048D7B6 /* SleepQualituyFeedbackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929EFEA62ADF84840048D7B6 /* SleepQualituyFeedbackModel.swift */; };
@@ -87,6 +91,11 @@
 		9281C87B2AD8D6C400CD7991 /* MainLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainLoginViewController.swift; sourceTree = "<group>"; };
 		9281C87F2AD8EDFC00CD7991 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		9281C8812AD8F4C100CD7991 /* DeviceControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceControlViewController.swift; sourceTree = "<group>"; };
+		929077692AE08C550017AF20 /* Sep769_project.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sep769_project.entitlements; sourceTree = "<group>"; };
+		9290776B2AE0C8270017AF20 /* HealthData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthData.swift; sourceTree = "<group>"; };
+		9290776C2AE0C8270017AF20 /* HealthDataFetcherError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthDataFetcherError.swift; sourceTree = "<group>"; };
+		9290776D2AE0C8270017AF20 /* HealthDataFetcher+Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HealthDataFetcher+Process.swift"; sourceTree = "<group>"; };
+		9290776E2AE0C8270017AF20 /* HealthDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthDataFetcher.swift; sourceTree = "<group>"; };
 		929EFEA22ADED3CE0048D7B6 /* HumiTempSoundModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumiTempSoundModel.swift; sourceTree = "<group>"; };
 		929EFEA42ADED41A0048D7B6 /* LocalCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalCollection.swift; sourceTree = "<group>"; };
 		929EFEA62ADF84840048D7B6 /* SleepQualituyFeedbackModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepQualituyFeedbackModel.swift; sourceTree = "<group>"; };
@@ -145,6 +154,8 @@
 		9253A7C62AD1ED7700B58808 /* Sep769_project */ = {
 			isa = PBXGroup;
 			children = (
+				9290776A2AE0C8060017AF20 /* HealthDataFetch */,
+				929077692AE08C550017AF20 /* Sep769_project.entitlements */,
 				920938162AD34E4B00E54E54 /* AuthenticationExample.entitlements */,
 				9253A81A2AD342EF00B58808 /* Utility */,
 				9253A8082AD342E900B58808 /* ViewControllers */,
@@ -243,6 +254,17 @@
 				9253A8222AD342EF00B58808 /* Animator.swift */,
 			);
 			path = TransitionAnimator;
+			sourceTree = "<group>";
+		};
+		9290776A2AE0C8060017AF20 /* HealthDataFetch */ = {
+			isa = PBXGroup;
+			children = (
+				9290776B2AE0C8270017AF20 /* HealthData.swift */,
+				9290776E2AE0C8270017AF20 /* HealthDataFetcher.swift */,
+				9290776D2AE0C8270017AF20 /* HealthDataFetcher+Process.swift */,
+				9290776C2AE0C8270017AF20 /* HealthDataFetcherError.swift */,
+			);
+			path = HealthDataFetch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -362,9 +384,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				9281C8822AD8F4C100CD7991 /* DeviceControlViewController.swift in Sources */,
+				9290776F2AE0C8280017AF20 /* HealthData.swift in Sources */,
 				9253A8132AD342E900B58808 /* AuthViewController.swift in Sources */,
 				9253A8142AD342E900B58808 /* LoginController.swift in Sources */,
 				9253A8152AD342E900B58808 /* UserViewController.swift in Sources */,
+				929077712AE0C8280017AF20 /* HealthDataFetcher+Process.swift in Sources */,
 				929EFEA72ADF84840048D7B6 /* SleepQualituyFeedbackModel.swift in Sources */,
 				9253A8172AD342E900B58808 /* OtherAuthViewController.swift in Sources */,
 				9253A7CC2AD1ED7700B58808 /* ViewController.swift in Sources */,
@@ -374,6 +398,7 @@
 				9253A8232AD342EF00B58808 /* CryptoUtils.swift in Sources */,
 				9253A8192AD342E900B58808 /* PhoneAuthViewController.swift in Sources */,
 				9253A7FF2AD3426100B58808 /* OtherAuthMethods.swift in Sources */,
+				929077702AE0C8280017AF20 /* HealthDataFetcherError.swift in Sources */,
 				9253A8002AD3426100B58808 /* AuthProvider.swift in Sources */,
 				9253A8242AD342EF00B58808 /* LoginDelegate.swift in Sources */,
 				9253A8272AD342EF00B58808 /* DataSourceProvider.swift in Sources */,
@@ -381,6 +406,7 @@
 				9253A8262AD342EF00B58808 /* DataSourceProtocols.swift in Sources */,
 				9281C8762AD8827A00CD7991 /* SelectLoginMethodViewController.swift in Sources */,
 				9253A8012AD3426100B58808 /* Section.swift in Sources */,
+				929077722AE0C8280017AF20 /* HealthDataFetcher.swift in Sources */,
 				929EFEA52ADED41A0048D7B6 /* LocalCollection.swift in Sources */,
 				9253A8252AD342EF00B58808 /* Extensions.swift in Sources */,
 				9253A7C82AD1ED7700B58808 /* AppDelegate.swift in Sources */,
@@ -472,7 +498,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -529,7 +555,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -545,6 +571,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Sep769_project/Sep769_project.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6GM672M563;
@@ -559,7 +586,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -582,6 +609,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Sep769_project/Sep769_project.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6GM672M563;
@@ -596,7 +624,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
