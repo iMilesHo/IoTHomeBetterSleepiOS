@@ -1,4 +1,4 @@
-# IOTHomeSleepBetter_iOSAPP
+# IoT for better sleep iOS App
 
 This is the repository for the SEP 769 project's iOS application. The primary aim of the app is to enhance sleep quality using IoT by providing functionalities ranging from user authentication to iOS HealthKit integration.
 
