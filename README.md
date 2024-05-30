@@ -1,6 +1,22 @@
 # IoT for better sleep iOS App
 
-This is the repository for the SEP 769 project's iOS application. The primary aim of the app is to enhance sleep quality using IoT by providing functionalities ranging from user authentication to iOS HealthKit integration.
+Here is a repository of projects on IOT and Deep Learning Applications. The projects originated from a course "Cyber Physical Systems", SEP 769, at McMaster University. The primary aim of the app is to enhance sleep quality using IoT by providing functionalities ranging from user authentication to iOS HealthKit integration.
+
+## Architecture:
+
+<p align="center">
+    <img src="./Imgs/part1_data_pipline.png" width="500" />
+</p>
+
+## iOS App:
+
+<p align="center">
+    <img src="./Imgs/part1_client.png" width="500" />
+</p>
+
+<p align="center">
+    <img src="./Imgs/appdemo.gif" height="500" />
+</p>
 
 ## Features:
 
@@ -17,15 +33,17 @@ This is the repository for the SEP 769 project's iOS application. The primary ai
 
 - Xcode (latest version recommended)
 - An iOS device running a supported version of iOS.
-  
+
 ### Setup:
 
 1. Clone this repository:
+
    ```bash
    git clone [repository-link]
    ```
 
 2. Navigate to the project directory and pod:
+
    ```bash
    cd IOTHomeSleepBetter_iOSAPP
    pod install
@@ -39,10 +57,4 @@ This is the repository for the SEP 769 project's iOS application. The primary ai
 
 ## Contributing:
 
-Contributions are welcome! Please ensure that you test any changes thoroughly before creating a pull request.
-
-
-## Acknowledgements:
-
-- Everyone who provided feedback and helped in testing.
-
+Lyle He independently developed this iOS app as part of the course project. If you would like to contribute to this project, please contact the owner.

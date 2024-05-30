@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4171A26E2BC62528003F6120 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4171A26D2BC62528003F6120 /* GoogleService-Info.plist */; };
 		9201C6C22AD90877000C7A97 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9201C6C12AD90877000C7A97 /* FeedbackViewController.swift */; };
 		9253A7C82AD1ED7700B58808 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9253A7C72AD1ED7700B58808 /* AppDelegate.swift */; };
 		9253A7CA2AD1ED7700B58808 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9253A7C92AD1ED7700B58808 /* SceneDelegate.swift */; };
@@ -34,7 +35,6 @@
 		9253A8262AD342EF00B58808 /* DataSourceProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9253A81F2AD342EF00B58808 /* DataSourceProtocols.swift */; };
 		9253A8272AD342EF00B58808 /* DataSourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9253A8202AD342EF00B58808 /* DataSourceProvider.swift */; };
 		9253A8282AD342EF00B58808 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9253A8222AD342EF00B58808 /* Animator.swift */; };
-		9253A82D2AD3442100B58808 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9253A82C2AD3442100B58808 /* GoogleService-Info.plist */; };
 		9281C8742AD84EE400CD7991 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9281C8732AD84EE400CD7991 /* OnboardingViewController.swift */; };
 		9281C8762AD8827A00CD7991 /* SelectLoginMethodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9281C8752AD8827A00CD7991 /* SelectLoginMethodViewController.swift */; };
 		9281C8782AD8966F00CD7991 /* EmailLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9281C8772AD8966F00CD7991 /* EmailLoginViewController.swift */; };
@@ -53,6 +53,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4171A26D2BC62528003F6120 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9201C6C12AD90877000C7A97 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		920938162AD34E4B00E54E54 /* AuthenticationExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = AuthenticationExample.entitlements; sourceTree = "<group>"; };
 		9253A7C42AD1ED7700B58808 /* Sep769_project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sep769_project.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,7 +84,6 @@
 		9253A81F2AD342EF00B58808 /* DataSourceProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSourceProtocols.swift; sourceTree = "<group>"; };
 		9253A8202AD342EF00B58808 /* DataSourceProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSourceProvider.swift; sourceTree = "<group>"; };
 		9253A8222AD342EF00B58808 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
-		9253A82C2AD3442100B58808 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		9281C8732AD84EE400CD7991 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		9281C8752AD8827A00CD7991 /* SelectLoginMethodViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLoginMethodViewController.swift; sourceTree = "<group>"; };
 		9281C8772AD8966F00CD7991 /* EmailLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginViewController.swift; sourceTree = "<group>"; };
@@ -168,7 +168,7 @@
 				9253A7D02AD1ED7900B58808 /* Assets.xcassets */,
 				9253A7D22AD1ED7900B58808 /* LaunchScreen.storyboard */,
 				9253A7D52AD1ED7900B58808 /* Info.plist */,
-				9253A82C2AD3442100B58808 /* GoogleService-Info.plist */,
+				4171A26D2BC62528003F6120 /* GoogleService-Info.plist */,
 				9281C8732AD84EE400CD7991 /* OnboardingViewController.swift */,
 				929EFEA42ADED41A0048D7B6 /* LocalCollection.swift */,
 				9281C8752AD8827A00CD7991 /* SelectLoginMethodViewController.swift */,
@@ -328,7 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9253A7D42AD1ED7900B58808 /* LaunchScreen.storyboard in Resources */,
-				9253A82D2AD3442100B58808 /* GoogleService-Info.plist in Resources */,
+				4171A26E2BC62528003F6120 /* GoogleService-Info.plist in Resources */,
 				9253A7D12AD1ED7900B58808 /* Assets.xcassets in Resources */,
 				9253A7CF2AD1ED7700B58808 /* Main.storyboard in Resources */,
 			);
@@ -574,7 +574,7 @@
 				CODE_SIGN_ENTITLEMENTS = Sep769_project/Sep769_project.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6GM672M563;
+				DEVELOPMENT_TEAM = G822BFNQ5B;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sep769_project/Info.plist;
@@ -610,9 +610,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sep769_project/Sep769_project.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6GM672M563;
+				DEVELOPMENT_TEAM = G822BFNQ5B;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sep769_project/Info.plist;
@@ -632,6 +633,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.milesho.iOSAPPSEP769Project;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
