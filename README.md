@@ -5,17 +5,14 @@ Here is a repository of projects on IOT and Deep Learning Applications. The proj
 ## Architecture:
 
 <p align="center">
-    <img src="./Imgs/part1_data_pipline.png" width="500" />
+    <img src="./Imgs/part1_data_pipline.png" width="875" />
 </p>
 
 ## iOS App:
 
-<p align="center">
-    <img src="./Imgs/part1_client.png" width="500" />
-</p>
-
-<p align="center">
-    <img src="./Imgs/appdemo.gif" height="500" />
+<p float="left" align="center">
+    <img src="./Imgs/part1_client.png" height="400" />
+    <img src="./Imgs/appdemo.gif" height="400" />
 </p>
 
 ## Features:
